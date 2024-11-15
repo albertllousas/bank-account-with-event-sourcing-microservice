@@ -85,20 +85,8 @@ data class Account(
     }
 
     fun close(): Either<AccountClosingFailed, Account> = when {
-        status == Closed -> AccountClosingFailed(
-            generateId(),
-            id,
-            now(clock),
-            AccountClosingFailed.Reason.ALREADY_CLOSED
-        ).left()
-
-        balance > ZERO -> AccountClosingFailed(
-            generateId(),
-            id,
-            now(clock),
-            AccountClosingFailed.Reason.FUNDS_STILL_PRESENT
-        ).left()
-
+        status == Closed -> AccountClosingFailed(generateId(), id, now(clock), AccountClosingFailed.Reason.ALREADY_CLOSED).left()
+        balance > ZERO -> AccountClosingFailed(generateId(), id, now(clock), AccountClosingFailed.Reason.FUNDS_STILL_PRESENT).left()
         else -> copy(
             status = Closed,
             revision = revision,
