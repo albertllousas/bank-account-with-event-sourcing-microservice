@@ -2,4 +2,4 @@
 
 ## Problem
 
-Code for [this](https://medium.com/@albert.llousas/building-modern-architectures-functional-core-imperative-shell-revamp-0bb5ae62b589) medium article.
+Code for [this](https://medium.com/@albert.llousas/exploring-event-sourcing-a-scalable-bank-account-19b9d55302e0) medium article.
