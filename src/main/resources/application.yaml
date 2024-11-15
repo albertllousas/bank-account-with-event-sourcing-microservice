@@ -1,0 +1,63 @@
+server:
+  port: 8080
+  undertow:
+    eager-filter-init: true
+management:
+  endpoints:
+    enabled-by-default: false
+    web:
+      base-path: /management
+      exposure:
+        include:
+          - info
+          - health
+          - metrics
+  endpoint:
+    info:
+      enabled: true
+    health:
+      enabled: true
+      show-details: always
+    metrics:
+      enabled: true
+  health:
+    db:
+      enabled: false
+  metrics:
+    export:
+      statsd:
+        host: "172.17.0.1"
+    enable:
+      all: true
+
+info:
+  app:
+    java:
+      source: '11'
+      target: '11'
+
+spring:
+  application:
+    name: 'account-service'
+  main:
+    banner-mode: 'off'
+  mvc:
+    favicon:
+      enabled: false
+  datasource:
+    url: {datasource-url}
+    username: {datasource-username}
+    password: {datasource-password}
+  flyway:
+    url: jdbc:postgresql://localhost:5432/account-projections
+    schemas: public
+    user: account-projections
+    password:
+eventstore:
+  host: {eventstore-host}
+  port: {eventstore-port}
+  username: {eventstore-username}
+  password: {eventstore-password}
+pulsar:
+  service-url: {pulsar-service-url}
+  token: {pulsar-token}

@@ -1,0 +1,1 @@
+# Exploring event sourcing: A scalable Bank Account Microservice 
