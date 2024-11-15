@@ -72,11 +72,7 @@ class PulsarCryptoTransactionConsumer(
 /*
 External card event
 */
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "eventType"
-)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "eventType")
 @JsonSubTypes(
     JsonSubTypes.Type(value = CryptoTransactionEvent.Initiated::class, name = "initiated"),
     JsonSubTypes.Type(value = CryptoTransactionEvent.Signed::class, name = "signed"),

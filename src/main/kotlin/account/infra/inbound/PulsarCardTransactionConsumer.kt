@@ -66,11 +66,7 @@ class PulsarCardTransactionConsumer(
 /*
 External card event
 */
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "eventType"
-)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "eventType")
 @JsonSubTypes(
     JsonSubTypes.Type(value = CardTransactionEvent.Initiated::class, name = "initiated"),
     JsonSubTypes.Type(value = CardTransactionEvent.Authorized::class, name = "authorized")

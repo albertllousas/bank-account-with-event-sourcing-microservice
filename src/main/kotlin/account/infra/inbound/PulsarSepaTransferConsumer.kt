@@ -72,11 +72,7 @@ class PulsarSepaTransferConsumer(
 /*
 External SEPA event
 */
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "eventType"
-)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "eventType")
 @JsonSubTypes(
     JsonSubTypes.Type(value = SepaTransferEvent.Initiated::class, name = "initiated"),
     JsonSubTypes.Type(value = SepaTransferEvent.Accepted::class, name = "accepted")
