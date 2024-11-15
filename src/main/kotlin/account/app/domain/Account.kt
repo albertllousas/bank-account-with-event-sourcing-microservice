@@ -14,13 +14,12 @@ import arrow.core.raise.either
 import arrow.core.raise.ensure
 import arrow.core.right
 import java.math.BigDecimal
-import java.math.BigDecimal.*
+import java.math.BigDecimal.ZERO
 import java.time.Clock
 import java.time.LocalDateTime.now
 import java.util.Currency
 import java.util.UUID
 
-// transaction id as event id for credits and debits
 data class Account(
     val id: UUID,
     val customerId: UUID,
@@ -47,21 +46,21 @@ data class Account(
     fun credit(
         transactionId: UUID, amount: BigDecimal, currency: String, source: TransactionSource
     ): Either<AccountCreditFailed, Account> = either {
-            ensure(currency == this@Account.currency.currencyCode) {
-                AccountCreditFailed(transactionId, id, now(clock), Reason.INVALID_CURRENCY)
-            }
-            ensure(status == Opened) {
-                AccountCreditFailed(transactionId, id, now(clock), Reason.ACCOUNT_NOT_ON_VALID_STATUS)
-            }
-            ensure(amount > ZERO) {
-                AccountCreditFailed(transactionId, id, now(clock), Reason.NON_POSITIVE_AMOUNT)
-            }
-            copy(
-                balance = balance + amount,
-                revision = revision,
-                events = events + AccountCredited(transactionId, id, now(clock), amount, transactionId, source)
-            )
+        ensure(currency == this@Account.currency.currencyCode) {
+            AccountCreditFailed(transactionId, id, now(clock), Reason.INVALID_CURRENCY)
         }
+        ensure(status == Opened) {
+            AccountCreditFailed(transactionId, id, now(clock), Reason.ACCOUNT_NOT_ON_VALID_STATUS)
+        }
+        ensure(amount > ZERO) {
+            AccountCreditFailed(transactionId, id, now(clock), Reason.NON_POSITIVE_AMOUNT)
+        }
+        copy(
+            balance = balance + amount,
+            revision = revision,
+            events = events + AccountCredited(transactionId, id, now(clock), amount, transactionId, source)
+        )
+    }
 
     fun debit(
         transactionId: UUID, amount: BigDecimal, currency: String, source: TransactionSource
@@ -86,15 +85,26 @@ data class Account(
     }
 
     fun close(): Either<AccountClosingFailed, Account> = when {
-        status == Closed -> AccountClosingFailed(generateId(), id, now(clock), AccountClosingFailed.Reason.ALREADY_CLOSED).left()
-        balance > ZERO -> AccountClosingFailed(generateId(), id, now(clock), AccountClosingFailed.Reason.FUNDS_STILL_PRESENT).left()
+        status == Closed -> AccountClosingFailed(
+            generateId(),
+            id,
+            now(clock),
+            AccountClosingFailed.Reason.ALREADY_CLOSED
+        ).left()
+
+        balance > ZERO -> AccountClosingFailed(
+            generateId(),
+            id,
+            now(clock),
+            AccountClosingFailed.Reason.FUNDS_STILL_PRESENT
+        ).left()
+
         else -> copy(
             status = Closed,
             revision = revision,
             events = events + AccountClosed(generateId(), id, now(clock))
         ).right()
     }
-
 
 
     companion object {
