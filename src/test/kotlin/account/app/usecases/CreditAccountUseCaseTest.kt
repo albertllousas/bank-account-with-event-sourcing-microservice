@@ -30,7 +30,7 @@ class CreditAccountUseCaseTest {
 
         creditAccount(UUID.randomUUID(), accountId, BigDecimal(100), "EUR", SEPA_TRANSFER)
 
-        verify { accountWriteRepository.save(match { it.events[0] is AccountCredited }) }
+        verify { accountWriteRepository.save(match { it.newEvents[0] is AccountCredited }) }
     }
 
     @Test

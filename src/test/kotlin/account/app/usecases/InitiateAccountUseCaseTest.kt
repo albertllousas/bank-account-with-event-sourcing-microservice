@@ -23,7 +23,7 @@ class InitiateAccountUseCaseTest {
 
         usecase(accountId, "MAIN", "EUR", customerId)
 
-        verify { accountWriteRepository.save(match { it.events[0] is AccountInitiated }) }
+        verify { accountWriteRepository.save(match { it.newEvents[0] is AccountInitiated }) }
     }
 
     @Test

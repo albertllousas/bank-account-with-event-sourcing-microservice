@@ -36,7 +36,7 @@ class EventStoreAccountRepositoryTest {
         repository.save(account)
 
         val events = eventStoreDB.client.readStream("account-${account.id}", ReadStreamOptions.get()).get().events
-        events.map { it.event.eventData } shouldBe account.events.map { mapper.writeValueAsBytes(it) }
+        events.map { it.event.eventData } shouldBe account.newEvents.map { mapper.writeValueAsBytes(it) }
     }
 
     @Test

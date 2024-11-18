@@ -30,19 +30,19 @@ class EventStoreAccountRepository(
 
     override fun save(account: Account) {
         try {
-            if (account.events.isEmpty()) return
+            if (account.newEvents.isEmpty()) return
 
             val revision =
-                if (account.events.first() is AccountInitiated) AppendToStreamOptions.get().expectedRevision(noStream())
+                if (account.newEvents.first() is AccountInitiated) AppendToStreamOptions.get().expectedRevision(noStream())
                 else AppendToStreamOptions.get().expectedRevision(account.revision)
 
             eventStoreDBClient.appendToStream(
                 "$ACCOUNT_EVENTS_STREAM_PREFIX${account.id}",
                 revision,
-                account.events.map { toEventData(it) }.toTypedArray().iterator()
+                account.newEvents.map { toEventData(it) }.toTypedArray().iterator()
             ).get()
         } catch (e: ExecutionException) {
-            if(e.cause is WrongExpectedVersionException) throw OptimisticLockException(account.id, account.events.first().eventId) else throw e
+            if(e.cause is WrongExpectedVersionException) throw OptimisticLockException(account.id, account.newEvents.first().eventId) else throw e
         }
     }
 

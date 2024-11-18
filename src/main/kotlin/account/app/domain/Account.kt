@@ -28,7 +28,7 @@ data class Account(
     val revision: Long,
     val status: AccountStatus,
     val balance: BigDecimal,
-    val events: List<DomainEvent> = emptyList(),
+    val newEvents: List<DomainEvent> = emptyList(),
     val generateId: () -> UUID = Account.generateId,
     val clock: Clock = Clock.systemUTC(),
 ) {
@@ -39,7 +39,7 @@ data class Account(
             else -> copy(
                 status = Opened,
                 revision = revision,
-                events = events + AccountOpened(generateId(), id, now(clock))
+                newEvents = newEvents + AccountOpened(generateId(), id, now(clock))
             ).right()
         }
 
@@ -58,7 +58,7 @@ data class Account(
         copy(
             balance = balance + amount,
             revision = revision,
-            events = events + AccountCredited(transactionId, id, now(clock), amount, transactionId, source)
+            newEvents = newEvents + AccountCredited(transactionId, id, now(clock), amount, transactionId, source)
         )
     }
 
@@ -80,7 +80,7 @@ data class Account(
         copy(
             balance = balance - amount,
             revision = revision,
-            events = events + AccountDebited(transactionId, id, now(clock), amount, transactionId, source)
+            newEvents = newEvents + AccountDebited(transactionId, id, now(clock), amount, transactionId, source)
         )
     }
 
@@ -90,7 +90,7 @@ data class Account(
         else -> copy(
             status = Closed,
             revision = revision,
-            events = events + AccountClosed(generateId(), id, now(clock))
+            newEvents = newEvents + AccountClosed(generateId(), id, now(clock))
         ).right()
     }
 
@@ -124,7 +124,7 @@ data class Account(
                 type = AccountType.valueOf(accountType),
                 balance = ZERO,
                 status = Initiated,
-                events = listOf(AccountInitiated(accountId, accountId, now(clock), customerId, currency, accountType))
+                newEvents = listOf(AccountInitiated(accountId, accountId, now(clock), customerId, currency, accountType))
             )
         }
     }

@@ -14,7 +14,6 @@ import arrow.core.right
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.math.BigDecimal
 import java.math.BigDecimal.*
 import java.time.Clock
 import java.time.Instant
@@ -83,7 +82,7 @@ class AccountTest {
             result shouldBe account.copy(
                 status = Opened,
                 revision = 0,
-                events = listOf(AccountOpened(eventId, account.id, parse("2021-01-01T00:00:00")))
+                newEvents = listOf(AccountOpened(eventId, account.id, parse("2021-01-01T00:00:00")))
             ).right()
         }
 
@@ -125,7 +124,7 @@ class AccountTest {
             result shouldBe account.copy(
                 balance = 20.toBigDecimal(),
                 revision = 0,
-                events = listOf(
+                newEvents = listOf(
                     AccountCredited(transactionId, account.id, parse("2021-01-01T00:00:00"), TEN, transactionId, SEPA_TRANSFER)
                 )
             ).right()
@@ -181,7 +180,7 @@ class AccountTest {
             result shouldBe account.copy(
                 balance = 5.toBigDecimal(),
                 revision = 0,
-                events = listOf(
+                newEvents = listOf(
                     AccountDebited(transactionId, account.id, parse("2021-01-01T00:00:00"), 5.toBigDecimal(), transactionId, SEPA_TRANSFER)
                 )
             ).right()
@@ -249,7 +248,7 @@ class AccountTest {
             result shouldBe account.copy(
                 status = Closed,
                 revision = 0,
-                events = listOf(AccountClosed(eventId, account.id, parse("2021-01-01T00:00:00")))
+                newEvents = listOf(AccountClosed(eventId, account.id, parse("2021-01-01T00:00:00")))
             ).right()
         }
 

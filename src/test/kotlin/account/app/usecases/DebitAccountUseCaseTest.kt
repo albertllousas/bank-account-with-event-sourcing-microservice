@@ -32,7 +32,7 @@ class DebitAccountUseCaseTest {
 
         debitAccount(UUID.randomUUID(), accountId, BigDecimal(100), "EUR", SEPA_TRANSFER)
 
-        verify { accountWriteRepository.save(match { it.events[0] is AccountDebited }) }
+        verify { accountWriteRepository.save(match { it.newEvents[0] is AccountDebited }) }
     }
 
     @Test

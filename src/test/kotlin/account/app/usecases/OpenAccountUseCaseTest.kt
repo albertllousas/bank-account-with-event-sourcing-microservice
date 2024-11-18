@@ -31,7 +31,7 @@ class OpenAccountUseCaseTest {
 
         createAccount(accountId)
 
-        verify { accountWriteRepository.save(match { it.events[0] is AccountOpened }) }
+        verify { accountWriteRepository.save(match { it.newEvents[0] is AccountOpened }) }
     }
 
     @Test

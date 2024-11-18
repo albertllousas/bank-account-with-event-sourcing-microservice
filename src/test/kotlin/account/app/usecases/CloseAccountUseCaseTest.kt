@@ -30,7 +30,7 @@ class CloseAccountUseCaseTest {
 
         closeAccount(accountId)
 
-        verify { accountWriteRepository.save(match { it.events[0] is AccountClosed }) }
+        verify { accountWriteRepository.save(match { it.newEvents[0] is AccountClosed }) }
     }
 
     @Test
